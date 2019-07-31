@@ -3,7 +3,7 @@ meta:
   name         : cvbp
   title        : Computer vision best practices.
   keywords     : Computer vision, best practices, resnet18
-  version      : 1.0.2
+  version      : 1.0.3
   languages    : python
   license      : mit
   author       : Graham.Williams@microsoft.com
@@ -12,5 +12,7 @@ dependencies:
   files:
     # Needs to download: "https://download.pytorch.org/models/resnet18-5c106cde.pth" to /home/gjw/.torch/models/resnet18-5c106cde.pth
     - Microsoft/ComputerVision:utils_cv
+    - README.md
+    - tag.py
 commands:
   tag: Use pre-built model to tag an image.

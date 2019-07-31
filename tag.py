@@ -97,5 +97,5 @@ for path in args.path:
     # Predict the class label.
 
     _, ind, prob = learn.predict(im)
-    sys.stdout.write(f"{prob[ind]:.2f},{labels[ind]}\n")
+    sys.stdout.write(f"{prob[ind]:.2f},{labels[ind]},{path}\n")
 

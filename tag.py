@@ -12,7 +12,12 @@
 # https://github.com/microsoft/ComputerVision
 
 import sys
+stderr = sys.stderr
+devnull = open('/dev/null', 'w')
+sys.stderr = devnull
+
 import os
+
 import urllib.request
 import argparse
 
@@ -33,10 +38,12 @@ from utils_cv.classification.model import IMAGENET_IM_SIZE, model_to_learner
 # Parse command line arguments
 # ----------------------------------------------------------------------
 
+sys.stderr = stderr
 option_parser = argparse.ArgumentParser(add_help=False)
 
 option_parser.add_argument(
     'path',
+    nargs="+",
     help='path or url to image')
 
 #option_parser.add_argument(
@@ -45,6 +52,8 @@ option_parser.add_argument(
 
 
 args = option_parser.parse_args()
+
+sys.stderr = devnull
 
 # ----------------------------------------------------------------------
 
@@ -75,20 +84,18 @@ learn = model_to_learner(models.resnet18(pretrained=True), IMAGENET_IM_SIZE)
 #model = untar_data("resnet18-5c106cde.pth")
 #learn = load_learner(model)
 
-url = args.path
+for path in args.path:
 
-if is_url(url):
-    # Download an example image
-    # IM_URL = "https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg"
-    imfile = os.path.join(data_path(), "temp.jpg")
-    urllib.request.urlretrieve(url, imfile)
-else:
-    imfile = os.path.join(get_cmd_cwd(), url)
+    if is_url(path):
+        imfile = os.path.join(data_path(), "temp.jpg")
+        urllib.request.urlretrieve(path, imfile)
+    else:
+        imfile = os.path.join(get_cmd_cwd(), path)
     
-im = open_image(imfile, convert_mode='RGB')
+    im = open_image(imfile, convert_mode='RGB')
 
-# Predict the class label.
+    # Predict the class label.
 
-_, ind, prob = learn.predict(im)
-sys.stdout.write(f"{prob[ind]:.2f},{labels[ind]}\n")
+    _, ind, prob = learn.predict(im)
+    sys.stdout.write(f"{prob[ind]:.2f},{labels[ind]}\n")
 

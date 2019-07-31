@@ -10,7 +10,7 @@ meta:
   url          : https://github.com/gjwgit/cvbp
 dependencies:
   files:
-    - # Needs to download: "https://download.pytorch.org/models/resnet18-5c106cde.pth" to /home/gjw/.torch/models/resnet18-5c106cde.pth
-    - 'Microsoft/ComputerVision:utils_cv'
+    # Needs to download: "https://download.pytorch.org/models/resnet18-5c106cde.pth" to /home/gjw/.torch/models/resnet18-5c106cde.pth
+    - Microsoft/ComputerVision:utils_cv
 commands:
   tag: Use pre-built model to tag an image.

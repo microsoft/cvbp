@@ -3,14 +3,14 @@ meta:
   name         : bpcv
   title        : Computer vision best practices.
   keywords     : Computer vision, best practices, resnet18
-  version      : 0.0.1
+  version      : 1.0.0
   languages    : python
   license      : mit
   author       : Graham.Williams@microsoft.com
-  url          : https://github.com/gjwgit/bpcv
+  url          : https://github.com/gjwgit/cvbp
 dependencies:
-#  files:
-#    - # Needs to download: "https://download.pytorch.org/models/resnet18-5c106cde.pth" to /home/gjw/.torch/models/resnet18-5c106cde.pth
-#    - 'Microsoft/ComputerVision:utils_cv'
+  files:
+    - # Needs to download: "https://download.pytorch.org/models/resnet18-5c106cde.pth" to /home/gjw/.torch/models/resnet18-5c106cde.pth
+    - 'Microsoft/ComputerVision:utils_cv'
 commands:
   tag: Use pre-built model to tag an image.

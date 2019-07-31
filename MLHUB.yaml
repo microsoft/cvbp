@@ -3,7 +3,7 @@ meta:
   name         : bpcv
   title        : Computer vision best practices.
   keywords     : Computer vision, best practices, resnet18
-  version      : 1.0.0
+  version      : 1.0.1
   languages    : python
   license      : mit
   author       : Graham.Williams@microsoft.com

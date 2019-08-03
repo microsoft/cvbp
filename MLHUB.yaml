@@ -7,10 +7,10 @@ meta:
   languages    : python
   license      : mit
   author       : Graham.Williams@microsoft.com
-  url          : https://github.com/gjwgit/cvbp
+  url          : https://github.com/microsoft/cvbp
 dependencies:
   files:
-    # Needs to download: "https://download.pytorch.org/models/resnet18-5c106cde.pth" to /home/gjw/.torch/models/resnet18-5c106cde.pth
+    # TODO download: "https://download.pytorch.org/models/resnet18-5c106cde.pth" to /home/gjw/.torch/models/resnet18-5c106cde.pth
     - Microsoft/ComputerVision:utils_cv
     - README.md
     - tag.py

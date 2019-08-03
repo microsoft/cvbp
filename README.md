@@ -71,9 +71,7 @@ ml tag cvbp image_*.png
 0.87,redshank,image_10_bw_color.png
 ```
 
-## Demonstration
-
-https://upload.wikimedia.org/wikipedia/commons/6/68/Kashmir_willow_Cricket_Bat.jpg
+# Demonstration
 
 # Contributing
 

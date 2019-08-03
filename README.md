@@ -31,7 +31,7 @@ A demonstration of the package is presented below using the *demo*
 command. The package also provides a number of useful command line
 tools which we introduce here.
 
-*Tag*
+**tag**
 
 The *tag* command will identify the dominant object in a photo with a
 reported level of confidence. The confidence and tag and filename are

@@ -11,13 +11,18 @@
 # From the Microsoft Best Practices Suite: Computer Vision
 # https://github.com/microsoft/ComputerVision
 
+# Capture stderr to keep fastai quiet! Unfortunate that we need to
+# capture stderr but can not yet see an alternative to reduce the
+# noise.
+
 import sys
 stderr = sys.stderr
 devnull = open('/dev/null', 'w')
 sys.stderr = devnull
 
-import os
+# Required libraries.
 
+import os
 import urllib.request
 import argparse
 
@@ -50,9 +55,7 @@ option_parser.add_argument(
 #    '--model',
 #    help="use this model instead of '{}'.".format(RESNET18))
 
-
 args = option_parser.parse_args()
-
 sys.stderr = devnull
 
 # ----------------------------------------------------------------------
@@ -74,15 +77,17 @@ labels = imagenet_labels()
 # models.xception 	models.xresnet 	models.xresnet101
 # models.xresnet152 	models.xresnet18 	models.xresnet34
 # models.xresnet50
-learn = model_to_learner(models.resnet18(pretrained=True), IMAGENET_IM_SIZE)
+model = model_to_learner(models.resnet18(pretrained=True), IMAGENET_IM_SIZE)
 #learn = model_to_learner(models.resnet152(pretrained=True), IMAGENET_IM_SIZE)
 #learn = model_to_learner(models.xresnet152(pretrained=True), IMAGENET_IM_SIZE)
 
-# Want to load from local copy rather than from ~/.torch? Maybe
+# TODO: Want to load from local copy rather than from ~/.torch? Maybe
 #learn = load_learner(file="resnet18-5c106cde.pth")
 
 #model = untar_data("resnet18-5c106cde.pth")
 #learn = load_learner(model)
+
+# TODO Handle folder of images.
 
 for path in args.path:
 
@@ -96,6 +101,6 @@ for path in args.path:
 
     # Predict the class label.
 
-    _, ind, prob = learn.predict(im)
+    _, ind, prob = model.predict(im)
     sys.stdout.write(f"{prob[ind]:.2f},{labels[ind]},{path}\n")
 

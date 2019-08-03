@@ -49,8 +49,14 @@ Perhaps we would like to download this photo and then add the
 appropriate tag to it:
 ```console
 $ wget https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG -O koala.jpg
-$ 
+$ ml tag cvbp koala.jpg |
+  cut -d, -f2 |
+  xargs bash -c 'mogrify -comment $0 koala.jpg' 
+$ exiftool koala.jpg | grep -i comment
+Comment                         : koala
+```
 
+Here we identify the primary tag for a collection of photos.
 
 ```console
 ml tag cvbp image_*.png 

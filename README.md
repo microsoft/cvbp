@@ -1,18 +1,18 @@
+# Computer Vision Best Practice
 
-# Computer Vision Best Practices
-
-This [MLHub](https://mlhub.ai) package provides a demo of the Computer
-Vision Best Practices repository at
-<https://github.com/microsoft/ComputerVision>. It also implements a
-collection of pre-built Computer Vision models as command line tools
-following the notebook examples from the repository.
+This [MLHub](https://mlhub.ai) package provides a demo of Microsoft's
+Computer Vision Best Practice repository available from
+<https://github.com/microsoft/ComputerVision>, providing examples and
+command line tools for computer vision tasks.  A collection of
+pre-built Computer Vision models are exposed as command line tools
+building on the notebook examples from the repository.
 
 Visit the github repository for more details:
 <https://github.com/microsoft/cvbp>
 
 ## Usage
 
-- To install mlhub (Ubuntu 18.04 LTS)
+- To install mlhub (Ubuntu)
 
 ```console
 $ pip3 install mlhub
@@ -26,6 +26,44 @@ $ ml configure cvbp
 ```
 
 ## Command Line Tools
+
+A demonstration of the package is presented below using the *demo*
+command. The package also provides a number of useful command line
+tools which we introduce here.
+
+*Tag*
+
+The *tag* command will identify the dominant object in a photo with a
+reported level of confidence. The confidence and tag and filename are
+returned from the command, and can be piped on to other commands
+within a command line to, for example, add the tag to the meta-data of
+the image file.
+
+This first example is classified 100% as a koala.
+```console
+$ ml tag cvbp https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG
+1.00,koala,https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG
+```
+
+Perhaps we would like to download this photo and then add the
+appropriate tag to it:
+```console
+$ wget https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG -O koala.jpg
+$ 
+
+
+```console
+ml tag cvbp image_*.png 
+0.78,chickadee,image_01_bw_color.png
+1.00,custard_apple,image_02_bw_color.png
+0.98,echidna,image_03_bw_color.png
+0.45,clumber,image_04_bw_color.png
+1.00,beacon,image_05_bw_color.png
+0.49,Tibetan_terrier,image_06_bw_color.png
+0.90,great_white_shark,image_07_bw_color.png
+0.65,bell_pepper,image_09_bw_color.png
+0.87,redshank,image_10_bw_color.png
+```
 
 ## Demonstration
 

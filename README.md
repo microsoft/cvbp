@@ -59,7 +59,7 @@ Comment                         : koala
 Here we identify the primary tag for a collection of photos.
 
 ```console
-ml tag cvbp image_*.png 
+$ ml tag cvbp image_*.png 
 0.78,chickadee,image_01_bw_color.png
 1.00,custard_apple,image_02_bw_color.png
 0.98,echidna,image_03_bw_color.png
@@ -69,6 +69,14 @@ ml tag cvbp image_*.png
 0.90,great_white_shark,image_07_bw_color.png
 0.65,bell_pepper,image_09_bw_color.png
 0.87,redshank,image_10_bw_color.png
+```
+
+Perhaps we wish to add a tag to each photo in the current folder:
+```console
+$ ml tag cvbp *.jpg | 
+  cut -d, -f2,3 | 
+  tr ',' ' ' | 
+  xargs -d'\n' -n1 bash -c  'mogrify -comment $0 $1'
 ```
 
 # Demonstration

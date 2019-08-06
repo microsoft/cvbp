@@ -76,7 +76,7 @@ Perhaps we wish to add a tag to each photo in the current folder:
 $ ml tag cvbp *.jpg | 
   cut -d, -f2,3 | 
   tr ',' ' ' | 
-  xargs -d'\n' -n1 bash -c  'mogrify -comment $0 $1'
+  xargs -d'\n' -n1 bash -c 'mogrify -comment $0 $1'
 ```
 
 # Demonstration

@@ -13,8 +13,6 @@ dependencies:
     - --find-links https://download.pytorch.org/whl/torch_stable.html torch==1.2.0+cpu
     - --find-links https://download.pytorch.org/whl/torch_stable.html torchvision==0.4.0+cpu
     - azureml-sdk[notebooks,contrib]>=1.0.30
-    - bqplot
-    - Cython
     - fastai
     - git+https://github.com/philferriere/cocoapi.git#egg=pycocotools&subdirectory=PythonAPI
     - lxml>=4.3.2
@@ -30,3 +28,4 @@ dependencies:
     - webcam.py
 commands:
   tag: Use pre-built model to tag an image.
+  webcam: Use pre-built model to tag webcam stream.

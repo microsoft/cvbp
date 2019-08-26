@@ -10,9 +10,9 @@ meta:
   url          : https://github.com/microsoft/cvbp
 dependencies:
   pip3:
-    - --find-links https://download.pytorch.org/whl/torch_stable.html torch==1.2.0+cpu
-    - --find-links https://download.pytorch.org/whl/torch_stable.html torchvision==0.4.0+cpu
-    - azureml-sdk[notebooks,contrib]>=1.0.30
+    - '--find-links https://download.pytorch.org/whl/torch_stable.html torch==1.2.0+cpu'
+    - '--find-links https://download.pytorch.org/whl/torch_stable.html torchvision==0.4.0+cpu'
+    - 'azureml-sdk[notebooks,contrib]>=1.0.30'
     - bqplot
     - fastai
     - git+https://github.com/philferriere/cocoapi.git#egg=pycocotools&subdirectory=PythonAPI

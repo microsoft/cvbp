@@ -22,7 +22,8 @@ dependencies:
     - scikit-learn>=0.19.1
   files:
     # TODO download: "https://download.pytorch.org/models/resnet18-5c106cde.pth" to /home/gjw/.torch/models/resnet18-5c106cde.pth
-    - 'Microsoft/ComputerVision:utils_cv'
+    # `00538529a` is currently the latest commmit on branch `stagingOD`
+    - 'Microsoft/ComputerVision@00538529a:utils_cv'
     - README.md
     - tag.py
     - webcam.py

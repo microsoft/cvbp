@@ -3,7 +3,7 @@ meta:
   name         : cvbp
   title        : Computer vision best practices.
   keywords     : Computer vision, best practices, resnet18
-  version      : 1.1.0
+  version      : 1.2.0
   languages    : python
   license      : mit
   author       : Graham.Williams@microsoft.com
@@ -31,6 +31,10 @@ dependencies:
     - README.md
     - tag.py
     - webcam.py
+    - classify.py
+    - detect.py
 commands:
   tag: Use pre-built model to tag an image.
   webcam: Use pre-built model to tag webcam stream.
+  classify: Classify image.
+    detect: Detect objects.

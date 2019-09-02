@@ -15,15 +15,6 @@ dependencies:
     - fastai
     - Cython
     - pycocotools
-    #- --find-links https://download.pytorch.org/whl/torch_stable.html torch==1.2.0+cpu
-    # - --find-links https://download.pytorch.org/whl/torch_stable.html torchvision==0.4.0+cpu
-    #- azureml-sdk[notebooks,contrib]>=1.0.30
-    #- git+https://github.com/philferriere/cocoapi.git#egg=pycocotools&subdirectory=PythonAPI
-    #- lxml>=4.3.2
-    #- nvidia-ml-py3
-    #- opencv-contrib-python
-    #- pycocotools>=2.0
-    #- scikit-learn>=0.19.1
   files:
     # TODO download: "https://download.pytorch.org/models/resnet18-5c106cde.pth" to /home/gjw/.torch/models/resnet18-5c106cde.pth
     # `00538529a` is currently the latest commmit on branch `stagingOD`

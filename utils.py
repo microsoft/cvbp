@@ -82,7 +82,7 @@ def process_webcam(func):
     camera = get_camera()  # Open webcam
     plt.axis('off')  # Turn off axis in plot window
 
-    print("\nPlease close the window (Ctrl-w) to quit.")
+#    print("\nPlease close the window (Ctrl-w) to quit.")
 
     im = plt.gca().imshow(func(camera))
     video = FuncAnimation(

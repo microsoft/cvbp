@@ -24,6 +24,7 @@ dependencies:
     - webcam.py
     - classify.py
     - detect.py
+    - utils.py
 commands:
   tag: Use pre-built model to tag an image.
   webcam: Use pre-built model to tag webcam stream.

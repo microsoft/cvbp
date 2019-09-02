@@ -37,4 +37,4 @@ commands:
   tag: Use pre-built model to tag an image.
   webcam: Use pre-built model to tag webcam stream.
   classify: Classify image.
-    detect: Detect objects.
+  detect: Detect objects.

@@ -79,7 +79,29 @@ $ ml tag cvbp *.jpg |
   xargs -d'\n' -n1 bash -c 'mogrify -comment $0 $1'
 ```
 
+**classify**
+
+The *classify* command will open up the computer's webcam and begin
+classifying the primary object within the frame of the camera.
+
+```console
+$ ml classify cvbp
+```
+
+**detect**
+
+The *detect* command will open up the computer's webcam and begin
+detecting objects within the frame of the camera.
+
+```console
+$ ml detect cvbp
+```
+
 # Demonstration
+
+```console
+$ ml demo cvbp
+```
 
 # Contributing
 

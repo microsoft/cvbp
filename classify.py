@@ -57,6 +57,9 @@ labels = imagenet_labels()  # Load model labels
 
 # Load ResNet model
 # * https://download.pytorch.org/models/resnet18-5c106cde.pth -> ~/.cache/torch/checkpoints/resnet18-5c106cde.pth
+#
+# If set `os.environ['TORCH_HOME'] = '~/.torch'`, then model weight file would be loaded from '~/.torch/checkpoints/resnet18-5c106cde.pth'.
+# See [torch.utils.model_zoo](https://pytorch.org/docs/stable/model_zoo.html#module-torch.utils.model_zoo)
 learn = model_to_learner(models.resnet18(pretrained=True), IMAGENET_IM_SIZE)
 #learn = model_to_learner(models.resnet152(pretrained=True), IMAGENET_IM_SIZE)
 #learn = model_to_learner(models.xresnet152(pretrained=True), IMAGENET_IM_SIZE)

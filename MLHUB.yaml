@@ -15,18 +15,20 @@ dependencies:
     - fastai
     - Cython
     - pycocotools
+    - IPython
+    - opencv-contrib-python
   files:
     # TODO download: "https://download.pytorch.org/models/resnet18-5c106cde.pth" to /home/gjw/.torch/models/resnet18-5c106cde.pth
     # `00538529a` is currently the latest commmit on branch `stagingOD`
     - 'Microsoft/ComputerVision@00538529a:utils_cv'
     - README.md
+    - utils.py
+    - demo.py
     - tag.py
-    - webcam.py
     - classify.py
     - detect.py
-    - utils.py
 commands:
-  tag: Use pre-built model to tag an image.
-  webcam: Use pre-built model to tag webcam stream.
-  classify: Classify image.
-  detect: Detect objects.
+  demo     : Use pre-built open source models for computer vision.
+  tag      : Use pre-built model to tag an image.
+  classify : Classify images presented to the webcam.
+  detect   : Detect objects as they appear on the webcam.

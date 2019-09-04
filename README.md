@@ -10,6 +10,15 @@ building on the notebook examples from the repository.
 Visit the github repository for more details:
 <https://github.com/microsoft/cvbp>
 
+## Quick Start Examples
+
+```console
+$ ml demo     cvbp
+$ ml tag      cvbp https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG
+$ ml classify cvbp
+$ ml detect   cvbp
+```
+
 ## Usage
 
 - To install mlhub (Ubuntu)

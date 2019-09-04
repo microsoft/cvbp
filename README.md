@@ -1,16 +1,20 @@
 # Computer Vision Best Practice
 
-This [MLHub](https://mlhub.ai) package provides a demo of Microsoft's
+Giving computers some semblance of vision has become practical with
+the massive compute and data that is available today. This
+[MLHub](https://mlhub.ai) package provides a demo of Microsoft's
 Computer Vision Best Practice repository available from
-<https://github.com/microsoft/ComputerVision>, providing examples and
-command line tools for computer vision tasks.  A collection of
-pre-built Computer Vision models are exposed as command line tools
-building on the notebook examples from the repository.
+<https://github.com/microsoft/ComputerVision>.
+
+An interactive demonstration provides an overview of the capabilities
+of the repository. Individual command line tools are also packaged for
+common computer vision tasks based on a collection of pre-built
+computer vision models.
 
 Visit the github repository for more details:
 <https://github.com/microsoft/cvbp>
 
-## Quick Start Examples
+## Quick Start Command Line Examples
 
 ```console
 $ ml demo     cvbp
@@ -106,7 +110,7 @@ detecting objects within the frame of the camera.
 $ ml detect cvbp
 ```
 
-# Demonstration
+## Demonstration
 
 ```console
 $ ml demo cvbp

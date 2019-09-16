@@ -57,6 +57,7 @@ command, and can be piped on to other commands within a command line
 to, for example, add the tag to the meta-data of the image file.
 
 This first example is classified 100% as a koala.
+![](https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG)
 ```console
 $ ml tag cvbp https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG
 1.00,koala,https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG
@@ -94,6 +95,13 @@ $ ml tag cvbp *.jpg |
   cut -d, -f2,3 | 
   tr ',' ' ' | 
   xargs -d'\n' -n1 bash -c 'mogrify -comment $0 $1'
+```
+
+Some more examples:
+![](https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg)
+```console
+$ ml tag cvbp https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg
+0.68,coffee_mug,https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg
 ```
 
 **classify**

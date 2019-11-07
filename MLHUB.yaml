@@ -22,7 +22,7 @@ dependencies:
     # `00538529a` is currently the latest commmit on branch `stagingOD`
     # - 'Microsoft/ComputerVision@00538529a:utils_cv'
     - 'Microsoft/ComputerVision:utils_cv'
-    - README.md
+    - docs/README.md
     - utils.py
     - demo.py
     - tag.py

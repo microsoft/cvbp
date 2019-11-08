@@ -4,7 +4,8 @@ Giving computers some semblance of vision (and the implied ability to
 process the images and identify the content) has become practical with
 the massive compute and training data that is available today. A
 number of pre-built machine learning models are freely available for
-this task. 
+this task and through this package we make them available for command
+line scripts.
 
 This [MLHub](https://mlhub.ai) package provides a demonstration of
 Microsoft's open source Computer Vision Best Practice repository

@@ -13,7 +13,7 @@ package supplies an interactive demonstration as an overview of the
 capabilities of the repository. Individual command line tools are also
 packaged for common computer vision tasks based on a collection of
 pre-built computer vision models. These command line tools aim to be
-used as part of a Linux pipeline of commands to process images.
+used as part of a Linux pipeline of image processing commands.
 
 Visit the github repository for this package for more details:
 <https://github.com/microsoft/cvbp>
@@ -21,10 +21,9 @@ Visit the github repository for this package for more details:
 ## Quick Start Command Line Examples
 
 ```console
-$ ml demo     cvbp
-$ ml tag      cvbp https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG
+$ ml demo cvbp
 $ ml classify cvbp
-$ ml detect   cvbp
+$ ml classify cvbp https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG
 ```
 
 ## Usage
@@ -44,89 +43,93 @@ $ ml configure cvbp
 
 ## Command Line Tools
 
-A full demonstration of the package is presented below using the
-*demo* command. The package also provides a number of useful command
-line tools which we introduce here.
+In addition to the *demo* presented below, the *cvbp* package provides
+useful command line tools. Below we demonstrate a number of
+these. Most commands take an image as a parameter which may be a url
+or a path to a local file.
 
-**tag**
+**classify**
 
-The *tag* command will identify the dominant object (*todo* return all
-identified objects) in a photo with a reported level of
-confidence. The confidence and tag and filename are returned from the
-command, and can be piped on to other commands within a command line
-to, for example, add the tag to the meta-data of the image file.
+The *classify* command will identify the dominant object in a photo
+with a level of confidence. The confidence, class, and filename are
+printed and can be piped on to other commands within a command
+line. This can allow us to add the class as a tag to the meta data of
+an image file.
 
-This first example is classified 100% as a koala.
+This first example image from the Internet is classified 100% as a
+koala.
 
 ![](https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG)
 ```console
-$ ml tag cvbp https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG
+$ ml classify cvbp https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG
 1.00,koala,https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG
 ```
-Perhaps we would like to download this photo and then add the
-appropriate tag to it:
+
+As an example of command line processing, we could download this photo
+(noting its license) and add the appropriate tag to it:
+
 ```console
-$ wget https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG -O koala.jpg
+$ wget -O koala.jpg https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG
 $ exiftool koala.jpg | grep -i comment
-$ ml tag cvbp koala.jpg |
+$ ml classify cvbp koala.jpg |
   cut -d, -f2 |
   xargs bash -c 'mogrify -comment $0 koala.jpg' 
 $ exiftool koala.jpg | grep -i comment
 Comment                         : koala
 ```
 
-Coffee mugs seem to be fairly standard fare:
+Coffee mugs seem to be fairly standard fare for image classification:
 
 ![](https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg)
 ```console
-$ ml tag cvbp https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg
+$ ml classify cvbp https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg
 0.68,coffee_mug,https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg
 ```
 
-Here we identify the tag for a collection of photos.
+Different pre-built image classification models are available. Here we
+use a more complex model to provide a more confident classification of
+the coffee mug:
 
 ```console
-$ ml tag cvbp image_*.png 
-0.78,chickadee,image_01_bw_color.png
-1.00,custard_apple,image_02_bw_color.png
-0.98,echidna,image_03_bw_color.png
-0.45,clumber,image_04_bw_color.png
-1.00,beacon,image_05_bw_color.png
-0.49,Tibetan_terrier,image_06_bw_color.png
-0.90,great_white_shark,image_07_bw_color.png
-0.65,bell_pepper,image_09_bw_color.png
-0.87,redshank,image_10_bw_color.png
+$ ml classify cvbp --model=resnet152 https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg
+0.85,coffee_mug,https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg
 ```
 
-We can add a tag to each photo in the current folder:
-```console
-$ ml tag cvbp *.jpg | 
-  cut -d, -f2,3 | 
-  tr ',' ' ' | 
-  xargs -d'\n' -n1 bash -c 'mogrify -comment $0 $1'
-```
-
-**classify**
-
-The *classify* command will open up the computer's webcam and begin
-classifying the primary object within the frame of the camera.
+If no image is supplied on the command line then the computer's webcam
+will be used to source a live feed and any objects held up to the
+camera will be classified. The live classification is available within
+the displayed live video image.
 
 ```console
 $ ml classify cvbp
 ```
 
-**detect**
-
-The *detect* command will open up the computer's webcam and begin
-detecting objects within the frame of the camera.
+Multiple images can be classified with one command line:
 
 ```console
-$ ml detect cvbp
+$ ml classify cvbp images/*.png
+0.34,jay,images/image_01_bw.png
+0.99,custard_apple,images/image_02_bw.png
+0.96,echidna,images/image_03_bw.png
+0.65,Afghan_hound,images/image_04_bw.png
+0.99,beacon,images/image_05_bw.png
+0.33,Tibetan_terrier,images/image_06_bw.png
+0.96,great_white_shark,images/image_07_bw.png
+0.58,crayfish,images/image_09_bw.png
+0.77,redshank,images/image_10_bw.png
 ```
 
-**mask**
+We can add a tag to photos which are classified with a confidence
+greater than 75%. This might allow us to later on search for photos
+using the photo meta-data tag.
 
-*RSN*
+```console
+$ ml classify cvbp images/*.png | 
+  awk '$1>0.75{print}' |
+  cut -d, -f2,3 | 
+  tr ',' ' ' | 
+  xargs -d'\n' -n1 bash -c 'mogrify -comment $0 $1'
+```
 
 ## Demonstration
 

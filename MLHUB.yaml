@@ -17,6 +17,7 @@ dependencies:
     - pycocotools
     - IPython
     - opencv-contrib-python
+    - numpy
   files:
     # TODO download: "https://download.pytorch.org/models/resnet18-5c106cde.pth" to /home/gjw/.torch/models/resnet18-5c106cde.pth
     # `00538529a` is currently the latest commmit on branch `stagingOD`
@@ -25,11 +26,7 @@ dependencies:
     - docs/README.md
     - utils.py
     - demo.py
-    - tag.py
     - classify.py
-    - detect.py
 commands:
   demo     : Use pre-built open source models for computer vision.
-  tag      : Use pre-built model to tag an image.
-  classify : Classify images presented to the webcam.
-  detect   : Detect objects as they appear on the webcam.
+  classify : Classify images.

@@ -104,6 +104,19 @@ the displayed live video image.
 $ ml classify cvbp
 ```
 
+If there is more than one camera on the computer then the command may
+not select the best one. For example, you may have an infrared camera
+and a webcam on your computer. If the resulting window is all green,
+then the infrared camera has been chosen. To choose your webcam the
+use of the *--webcam* command line option may help:
+
+```console
+$ ml classify cvbp --webcam=1
+```
+
+The *--webcam* command line option is also supported across other
+commands that use the webcam, including *demo*.
+
 Multiple images can be classified with one command line:
 
 ```console

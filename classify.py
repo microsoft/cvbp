@@ -4,76 +4,143 @@
 # Licensed under the MIT License.
 # Author: Graham.Williams@microsoft.com
 #
-# A script for image classfication (optionally with webcam capture)
-# based on a model of 1000 known objects.
+# A command line script to classify an image into one of 1000 know objects.
 #
-# ml classify cvbp
+# ml tag cvbp <path>
 #
 # From the Microsoft Best Practices Suite: Computer Vision
 # https://github.com/microsoft/ComputerVision
 
-from fastai.vision import models, Image
+# ----------------------------------------------------------------------
+# Setup.
+# ----------------------------------------------------------------------
+
+# Required libraries.
+
+import utils
+
+import os
+import sys
+import argparse
+import tempfile
+import urllib.request
+
+from mlhub.pkg import is_url
+from mlhub.utils import get_cmd_cwd
+
 from functools import partial
-from torchvision.models.detection import fasterrcnn_resnet50_fpn
+
+from fastai.vision import models, open_image, Image
 
 from utils_cv.classification.data import imagenet_labels
 from utils_cv.classification.model import IMAGENET_IM_SIZE, model_to_learner
-from utils_cv.detection.data import coco_labels
-from utils_cv.detection.model import _get_det_bboxes
-from utils_cv.detection.plot import PlotSettings, plot_boxes
-
-import argparse
-import utils
 
 # ----------------------------------------------------------------------
-# Parse command line arguments
+# Parse command line arguments.
 # ----------------------------------------------------------------------
 
-parser = argparse.ArgumentParser(
-    prog='classify',
-    description='Classify objects from camera.'
-)
+option_parser = argparse.ArgumentParser(add_help=False)
 
-#parser.add_argument(
-#    'capture',
-#    help="capture live image from webcam")
+option_parser.add_argument(
+    'path',
+    nargs="*",
+    help='path or url to image')
 
-args = parser.parse_args()
+option_parser.add_argument(
+    '-m', '--model',
+    help="model to use (default is resnet18)")
+
+args = option_parser.parse_args()
 
 # ----------------------------------------------------------------------
-# Prepare processing function
+# Load the ImageNet model - 1000 labels for classification.
 # ----------------------------------------------------------------------
 
-def classify_frame(capture, learner, label):
-    """Use the learner to predict the class label.
-    """
-    _, frame = capture.read()  # Capture frame-by-frame
-    _, ind, prob = learner.predict(Image(utils.cv2torch(frame)))
-    utils.put_text(frame, f"{label[ind]} ({prob[ind]:.2f})")
-    return utils.cv2matplotlib(frame)
+labels = imagenet_labels()   # The 1000 labels.
 
-
-labels = imagenet_labels()  # Load model labels
-
-# Load ResNet model
-# * https://download.pytorch.org/models/resnet18-5c106cde.pth -> ~/.cache/torch/checkpoints/resnet18-5c106cde.pth
+# Potential values for the pre-built model: --model=
 #
-# If set `os.environ['TORCH_HOME'] = '~/.torch'`, then model weight file would be loaded from '~/.torch/checkpoints/resnet18-5c106cde.pth'.
-# See [torch.utils.model_zoo](https://pytorch.org/docs/stable/model_zoo.html#module-torch.utils.model_zoo)
-learn = model_to_learner(models.resnet18(pretrained=True), IMAGENET_IM_SIZE)
-#learn = model_to_learner(models.resnet152(pretrained=True), IMAGENET_IM_SIZE)
-#learn = model_to_learner(models.xresnet152(pretrained=True), IMAGENET_IM_SIZE)
+# models.BasicBlock 	models.Darknet 		models.DynamicUnet
+# models.ResLayer 	models.ResNet 		models.SqueezeNet
+# models.UnetBlock 	models.WideResNet 	models.XResNet
+# models.alexnet 	models.darknet 		models.densenet121
+# models.densenet161 	models.densenet169 	models.densenet201
+# models.resnet101 	models.resnet152 	models.resnet18
+# models.resnet34 	models.resnet50 	models.squeezenet1_0
+# models.squeezenet1_1 	models.unet 		models.vgg16_bn
+# models.vgg19_bn 	models.wrn 		models.wrn_22
+# models.xception 	models.xresnet 		models.xresnet101
+# models.xresnet152 	models.xresnet18 	models.xresnet34
+# models.xresnet50
 
-# Want to load from local copy rather than from ~/.torch? Maybe
-#learn = load_learner(file="resnet18-5c106cde.pth")
+if args.model == None:
+    model = model_to_learner(models.resnet18(pretrained=True), IMAGENET_IM_SIZE)
+elif args.model == "resnet152":
+    model = model_to_learner(models.resnet152(pretrained=True), IMAGENET_IM_SIZE)
+elif args.model == "xresnet152":
+    model = model_to_learner(models.xresnet152(pretrained=True), IMAGENET_IM_SIZE)
+else:
+    sys.stderr.write(f"Selected model '{args.model}' is not known.\n")
+    sys.exit(1)
 
-#model = untar_data("resnet18-5c106cde.pth")
-#learn = load_learner(model)
+# TODO: Want to load from local copy rather than from ~/.torch which
+# means that for a new model the model first needs to be
+# downloaded. We might want to cache this downoad in CONFIGURE.
+# Some attempts:
 
-func = partial(classify_frame, learner=learn, label=labels)
+# model = load_learner(file="resnet18-5c106cde.pth")
+# trdat = untar_data("resnet18-5c106cde.pth")
+# model = load_learner(trdat)
 
-# ----------------------------------------------------------------------
-# Run webcam to show processed results
-# ----------------------------------------------------------------------
+# ------------------------------------------------------------------------
+# If no args then use the webcam
+# ------------------------------------------------------------------------
 
-utils.process_webcam(func)
+if not len(args.path):
+
+    # ----------------------------------------------------------------------
+    # Prepare processing function
+    # ----------------------------------------------------------------------
+
+    def classify_frame(capture, learner, label):
+        """Use the learner to predict the class label.
+        """
+        _, frame = capture.read()  # Capture frame-by-frame
+        _, ind, prob = learner.predict(Image(utils.cv2torch(frame)))
+        utils.put_text(frame, f"{label[ind]} ({prob[ind]:.2f})")
+        return utils.cv2matplotlib(frame)
+
+    func = partial(classify_frame, learner=model, label=labels)
+
+    # ----------------------------------------------------------------------
+    # Run webcam to show processed results
+    # ----------------------------------------------------------------------
+
+    utils.process_webcam(func)
+
+    sys.exit(0)
+    
+for path in args.path:
+
+    if is_url(path):
+        tempdir = tempfile.gettempdir()
+        imfile = os.path.join(tempdir, "temp.jpg")
+        urllib.request.urlretrieve(path, imfile)
+    else:
+        imfile = os.path.join(get_cmd_cwd(), path)
+    
+    im = open_image(imfile, convert_mode='RGB')
+
+    # Predict the class label.
+
+    _, ind, prob = model.predict(im)
+    sys.stdout.write(f"{prob[ind]:.2f},{labels[ind]},{path}\n")
+
+sys.exit(0)
+
+from fastai.vision import models, Image
+from functools import partial
+
+from utils_cv.classification.data import imagenet_labels
+from utils_cv.classification.model import IMAGENET_IM_SIZE, model_to_learner
+

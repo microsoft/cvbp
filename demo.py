@@ -50,22 +50,21 @@ parser = argparse.ArgumentParser(
     description='Classify or Detect objects from camera.'
 )
 
-#parser.add_argument(
-#    'domain',
-#    choices=['ic', 'od'],
-#    help="image classification (ic)/object detection (od)")
+parser.add_argument(
+    '-w', '--webcam',
+    help="which webcam to use (default is 0)")
 
 args = parser.parse_args()
 
-#print(args.domain)
-
-# TODO - ADD A TAG EXAMPLE AND ALL OTHER EXAMPLES
+webcam = 0 if args.webcam is None else args.webcam
 
 mlask(end="\n")
 
 mlcat("Webcam Classification","""\
 This demonstration will turn on your webcam (if it is accessible) and
-begin classifying the primary object within the fram of the webcam.
+begin classifying the primary object within the fram of the webcam. If 
+you have multiple webcams and the wrong one is selected, try selecting
+others with --webcam=1, for example.
 
 To continue close the webcam window with Ctrl-W.
 """)
@@ -88,16 +87,8 @@ def classify_frame(capture, learner, label):
 labels = imagenet_labels()  # Load model labels
 
 # Load ResNet model
-# * https://download.pytorch.org/models/resnet18-5c106cde.pth -> ~/.cache/torch/checkpoints/resnet18-5c106cde.pth
+
 learn = model_to_learner(models.resnet18(pretrained=True), IMAGENET_IM_SIZE)
-#learn = model_to_learner(models.resnet152(pretrained=True), IMAGENET_IM_SIZE)
-#learn = model_to_learner(models.xresnet152(pretrained=True), IMAGENET_IM_SIZE)
-
-# Want to load from local copy rather than from ~/.torch? Maybe
-#learn = load_learner(file="resnet18-5c106cde.pth")
-
-#model = untar_data("resnet18-5c106cde.pth")
-#learn = load_learner(model)
 
 func = partial(classify_frame, learner=learn, label=labels)
 
@@ -105,7 +96,7 @@ func = partial(classify_frame, learner=learn, label=labels)
 # Run webcam to show processed results
 # ----------------------------------------------------------------------
 
-utils.process_webcam(func)
+utils.process_webcam(func, webcam)
 
 # Webcam object detection
 
@@ -143,4 +134,4 @@ func = partial(detect_frame, model=model, label=labels)
 # Run webcam to show processed results
 # ----------------------------------------------------------------------
 
-utils.process_webcam(func)
+utils.process_webcam(func, webcam)

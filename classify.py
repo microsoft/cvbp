@@ -50,7 +50,13 @@ option_parser.add_argument(
     '-m', '--model',
     help="model to use (default is resnet18)")
 
+option_parser.add_argument(
+    '-w', '--webcam',
+    help="which webcam to use (default is 0)")
+
 args = option_parser.parse_args()
+
+webcam = 0 if args.webcam is None else args.webcam
 
 # ----------------------------------------------------------------------
 # Load the ImageNet model - 1000 labels for classification.
@@ -116,7 +122,7 @@ if not len(args.path):
     # Run webcam to show processed results
     # ----------------------------------------------------------------------
 
-    utils.process_webcam(func)
+    utils.process_webcam(func, webcam)
 
     sys.exit(0)
     

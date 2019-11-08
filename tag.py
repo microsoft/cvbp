@@ -4,7 +4,7 @@
 # Licensed under the MIT License.
 # Author: Graham.Williams@microsoft.com
 #
-# A script to classify an image into one of 1000 know objects.
+# A command line script to classify an image into one of 1000 know objects.
 #
 # ml tag cvbp <path>
 #

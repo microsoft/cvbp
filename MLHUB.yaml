@@ -3,7 +3,7 @@ meta:
   name         : cvbp
   title        : Computer vision best practices.
   keywords     : Computer vision, best practices, resnet
-  version      : 2.0.0
+  version      : 2.0.1
   languages    : python
   license      : mit
   author       : Graham.Williams@microsoft.com

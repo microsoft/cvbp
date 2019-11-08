@@ -135,7 +135,11 @@ for path in args.path:
     else:
         imfile = os.path.join(get_cmd_cwd(), path)
     
-    im = open_image(imfile, convert_mode='RGB')
+    try:
+        im = open_image(imfile, convert_mode='RGB')
+    except:
+        sys.stderr.write(f"'{imfile}' may not be an image file and will be skipped.\n")
+        continue
 
     # Predict the class label.
 

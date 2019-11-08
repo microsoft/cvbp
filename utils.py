@@ -19,7 +19,7 @@ def get_camera(num=0):
     :param num:  The camera number.  By default the first camera will be returned.
     :return: The camera used by OpenCV.
     """
-    capture = cv.VideoCapture(num)
+    capture = cv.VideoCapture(int(num))
     if not capture.isOpened():
         print('Unable to load camera!')
         sys.exit(1)
@@ -78,8 +78,8 @@ def put_text(im_cv, text):
     cv.putText(im_cv, text, (x, y), TEXT_FONT, TEXT_SIZE, TEXT_COLOR, LINE_WIDTH)
 
 
-def process_webcam(func):
-    camera = get_camera()  # Open webcam
+def process_webcam(func, num):
+    camera = get_camera(num)  # Open webcam
     plt.axis('off')  # Turn off axis in plot window
 
 #    print("\nPlease close the window (Ctrl-w) to quit.")

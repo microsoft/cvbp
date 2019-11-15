@@ -145,6 +145,29 @@ $ ml classify cvbp images/*.png |
   xargs -d'\n' -n1 bash -c 'mogrify -comment $0 $1'
 ```
 
+**detect**
+
+The *detect* command, in addition to identifying objects, returns the
+bounding box for the objects found in the image, consisting of the
+left top and right bottom coordinates.
+
+```console
+$ ml detect images/*.{jpg,png}
+1.00,cup,61,59,273,244,images/coffee_mug.jpg
+1.00,bird,86,56,605,761,images/kite.jpg
+0.83,dog,28,100,200,186,images/image_04_bw.png
+0.16,sheep,30,100,195,184,images/image_04_bw.png
+0.05,cow,241,125,255,204,images/image_04_bw.png
+0.74,person,89,50,193,190,images/image_06_bw.png
+0.22,horse,86,48,195,193,images/image_06_bw.png
+0.17,dog,106,52,193,181,images/image_06_bw.png
+0.08,umbrella,6,55,236,238,images/image_07_bw.png
+0.99,bird,37,31,251,246,images/image_10_bw.png
+```
+
+As with *classify*, with no argument the webcam is deployed to obtain
+images and to detect objects in real time.
+
 ## Demonstration
 
 ```console

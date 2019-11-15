@@ -6,7 +6,7 @@
 #
 # A command line script to classify an image into one of 1000 know objects.
 #
-# ml tag cvbp <path>
+# ml tag cvbp [<path>]
 #
 # From the Microsoft Best Practices Suite: Computer Vision
 # https://github.com/microsoft/ComputerVision
@@ -39,22 +39,22 @@ from utils_cv.classification.model import IMAGENET_IM_SIZE, model_to_learner
 # Parse command line arguments.
 # ----------------------------------------------------------------------
 
-option_parser = argparse.ArgumentParser(add_help=False)
+options = argparse.ArgumentParser(add_help=False)
 
-option_parser.add_argument(
+options.add_argument(
     'path',
     nargs="*",
     help='path or url to image')
 
-option_parser.add_argument(
+options.add_argument(
     '-m', '--model',
     help="model to use (default is resnet18)")
 
-option_parser.add_argument(
+options.add_argument(
     '-w', '--webcam',
     help="which webcam to use (default is 0)")
 
-args = option_parser.parse_args()
+args = options.parse_args()
 
 webcam = 0 if args.webcam is None else args.webcam
 
@@ -62,7 +62,12 @@ webcam = 0 if args.webcam is None else args.webcam
 # Load the ImageNet model - 1000 labels for classification.
 # ----------------------------------------------------------------------
 
-labels = imagenet_labels()   # The 1000 labels.
+try:
+    labels = imagenet_labels()   # The 1000 labels.
+except:
+    sys.stderr.write("Failed to obtain labels probably because of " +
+                     "a network connection error.\n")
+    sys.exit(1)
 
 # Potential values for the pre-built model: --model=
 #
@@ -108,15 +113,15 @@ if not len(args.path):
     # Prepare processing function
     # ----------------------------------------------------------------------
 
-    def classify_frame(capture, learner, label):
-        """Use the learner to predict the class label.
+    def classify_frame(capture, model, label):
+        """Use the model to predict the class label.
         """
         _, frame = capture.read()  # Capture frame-by-frame
-        _, ind, prob = learner.predict(Image(utils.cv2torch(frame)))
+        _, ind, prob = model.predict(Image(utils.cv2torch(frame)))
         utils.put_text(frame, f"{label[ind]} ({prob[ind]:.2f})")
         return utils.cv2matplotlib(frame)
 
-    func = partial(classify_frame, learner=model, label=labels)
+    func = partial(classify_frame, model=model, label=labels)
 
     # ----------------------------------------------------------------------
     # Run webcam to show processed results
@@ -145,12 +150,3 @@ for path in args.path:
 
     _, ind, prob = model.predict(im)
     sys.stdout.write(f"{prob[ind]:.2f},{labels[ind]},{path}\n")
-
-sys.exit(0)
-
-from fastai.vision import models, Image
-from functools import partial
-
-from utils_cv.classification.data import imagenet_labels
-from utils_cv.classification.model import IMAGENET_IM_SIZE, model_to_learner
-

@@ -7,14 +7,15 @@ number of pre-built machine learning models are freely available for
 this task and through this package we make them available for command
 line scripts.
 
-This [MLHub](https://mlhub.ai) package provides a demonstration of
-Microsoft's open source Computer Vision Best Practice repository
-available from <https://github.com/microsoft/ComputerVision>.  The
-package supplies an interactive demonstration as an overview of the
-capabilities of the repository. Individual command line tools are also
-packaged for common computer vision tasks based on a collection of
-pre-built computer vision models. These command line tools aim to be
-used as part of a Linux pipeline of image processing commands.
+This [MLHub](https://mlhub.ai) package provides command line tools
+based on Microsoft's open source Computer Vision Best Practice
+repository available from
+<https://github.com/microsoft/ComputerVision>.  Individual command
+line tools are packaged for common computer vision tasks based on a
+collection of pre-built computer vision models. These command line
+tools aim to be used as part of a Linux pipeline of image processing
+commands. The package also provide an interactive demonstration as an
+overview of the capabilities of the repository.
 
 Visit the github repository for this package for more details:
 <https://github.com/microsoft/cvbp>

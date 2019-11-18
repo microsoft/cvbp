@@ -1,12 +1,5 @@
 # Computer Vision Best Practice
 
-Giving computers some semblance of vision (and the implied ability to
-process the images and identify the content) has become practical with
-the massive compute and training data that is available today. A
-number of pre-built machine learning models are freely available for
-this task and through this package we make them available for command
-line scripts.
-
 This [MLHub](https://mlhub.ai) package provides command line tools
 based on Microsoft's open source Computer Vision Best Practice
 repository available from
@@ -17,6 +10,13 @@ pre-built computer vision models. These command line tools aim to be
 used as part of a Linux pipeline of image processing commands. The
 package also provides an interactive demonstration as an overview of
 the capabilities of the repository.
+
+Giving computers some semblance of vision (and the implied ability to
+process the images and identify the content) has become practical with
+the massive compute and training data that is available today. A
+number of pre-built machine learning models are freely available for
+this task and through this package we make them available for command
+line scripts.
 
 Visit the github repository for this package for more details:
 <https://github.com/microsoft/cvbp>

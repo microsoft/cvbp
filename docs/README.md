@@ -14,7 +14,7 @@ repository available from
 line tools are packaged for common computer vision tasks based on a
 collection of pre-built computer vision models. These command line
 tools aim to be used as part of a Linux pipeline of image processing
-commands. The package also provide an interactive demonstration as an
+commands. The package also provides an interactive demonstration as an
 overview of the capabilities of the repository.
 
 Visit the github repository for this package for more details:

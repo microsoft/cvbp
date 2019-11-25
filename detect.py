@@ -35,12 +35,9 @@ from utils_cv.detection.model import _get_det_bboxes
 from utils_cv.detection.plot import plot_boxes, PlotSettings
 
 from fastai.vision import open_image
-#from fastai.vision import Image#, models
-#from utils_cv.classification.data import imagenet_labels
-#from utils_cv.classification.model import IMAGENET_IM_SIZE, model_to_learner
 
 # ----------------------------------------------------------------------
-# Parse command line arguments.
+# Parse command line arguments: path --model= --webcam=
 # ----------------------------------------------------------------------
 
 options = argparse.ArgumentParser(

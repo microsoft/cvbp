@@ -6,7 +6,7 @@
 #
 # A command line script to classify an image into one of 1000 know objects.
 #
-# ml tag cvbp [<path>]
+# ml classify cvbp [<path>]
 #
 # From the Microsoft Best Practices Suite: Computer Vision
 # https://github.com/microsoft/ComputerVision
@@ -36,7 +36,7 @@ from utils_cv.classification.data import imagenet_labels
 from utils_cv.classification.model import IMAGENET_IM_SIZE, model_to_learner
 
 # ----------------------------------------------------------------------
-# Parse command line arguments.
+# Parse command line arguments: path --model= --webcam=
 # ----------------------------------------------------------------------
 
 options = argparse.ArgumentParser(add_help=False)

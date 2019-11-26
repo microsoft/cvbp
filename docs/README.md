@@ -54,18 +54,18 @@ or a path to a local file.
 **classify**
 
 The *classify* command will identify the dominant object in a photo
-with a level of confidence. The confidence, class, and filename are
-printed and can be piped on to other commands within a command
-line. This can allow us to add the class as a tag to the meta data of
-an image file.
+with a level of confidence. The confidence, class, pre-built model
+used, and filename are printed and can be piped on to other commands
+within a command line. This can allow us to add the class as a tag to
+the meta data of an image file.
 
-This first example image from the Internet is classified 100% as a
-koala.
+This example image from the Internet is classified 100% as a koala by
+the default resnet152 model.
 
 ![](https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG)
 ```console
 $ ml classify cvbp https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG
-1.00,koala,https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG
+1.00,koala,resnet152,https://upload.wikimedia.org/wikipedia/commons/2/2d/Koala_in_Australia.JPG
 ```
 
 As an example of command line processing, we could download this photo
@@ -86,7 +86,7 @@ Coffee mugs seem to be fairly standard fare for image classification:
 ![](https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg)
 ```console
 $ ml classify cvbp https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg
-0.68,coffee_mug,https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg
+0.68,coffee_mug,resnet152,https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg
 ```
 
 Different pre-built image classification models are available. Here we
@@ -95,7 +95,7 @@ the coffee mug:
 
 ```console
 $ ml classify cvbp --model=resnet152 https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg
-0.85,coffee_mug,https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg
+0.85,coffee_mug,resnet152,https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg
 ```
 
 If no image is supplied on the command line then the computer's webcam
@@ -124,15 +124,15 @@ Multiple images can be classified with one command line:
 
 ```console
 $ ml classify cvbp images/*.png
-0.34,jay,images/image_01_bw.png
-0.99,custard_apple,images/image_02_bw.png
-0.96,echidna,images/image_03_bw.png
-0.65,Afghan_hound,images/image_04_bw.png
-0.99,beacon,images/image_05_bw.png
-0.33,Tibetan_terrier,images/image_06_bw.png
-0.96,great_white_shark,images/image_07_bw.png
-0.58,crayfish,images/image_09_bw.png
-0.77,redshank,images/image_10_bw.png
+0.98,chickadee,resnet152,images/image_01_bw.png
+0.99,custard_apple,resnet152,images/image_02_bw.png
+1.00,echidna,resnet152,images/image_03_bw.png
+0.98,Great_Pyrenees,resnet152,images/image_04_bw.png
+0.96,beacon,resnet152,images/image_05_bw.png
+0.68,Maltese_dog,resnet152,images/image_06_bw.png
+0.91,great_white_shark,resnet152,images/image_07_bw.png
+0.13,banana,resnet152,images/image_09_bw.png
+0.90,redshank,resnet152,images/image_10_bw.png
 ```
 
 We can add a tag to photos which are classified with a confidence
@@ -142,9 +142,81 @@ using the photo meta-data tag.
 ```console
 $ ml classify cvbp images/*.png | 
   awk '$1>0.75{print}' |
-  cut -d, -f2,3 | 
+  cut -d, -f2,4 | 
   tr ',' ' ' | 
   xargs -d'\n' -n1 bash -c 'mogrify -comment $0 $1'
+```
+
+The default pre-built model used for classification is resent152 as
+note above. A collection of alternative pre-built models is available
+and can be accessed using the --model option. The available models can
+be listed with --model=list. 
+
+```console
+$ ml classify cvbp --model=list
+densenet201
+alexnet
+densenet121
+densenet161
+densenet169
+densenet201
+resnet101
+resnet152
+resnet18
+resnet34
+resnet50
+squeezenet1_0
+squeezenet1_1
+vgg16_bn
+vgg19_bn
+```
+
+All models can be selected with --model=all. Note that the first time
+a pre-built model is utilised it will need to be downloaded from the
+Internet, which can take a little time. 
+
+```console
+$ ml classify cvbp --model=all images/*.jpg
+0.44,espresso,densenet201,images/coffee_mug.jpg
+0.73,coffee_mug,alexnet,images/coffee_mug.jpg
+0.44,coffee_mug,densenet121,images/coffee_mug.jpg
+0.81,coffee_mug,densenet161,images/coffee_mug.jpg
+0.42,coffee_mug,densenet169,images/coffee_mug.jpg
+0.44,espresso,densenet201,images/coffee_mug.jpg
+0.81,coffee_mug,resnet101,images/coffee_mug.jpg
+0.85,coffee_mug,resnet152,images/coffee_mug.jpg
+0.68,coffee_mug,resnet18,images/coffee_mug.jpg
+0.76,coffee_mug,resnet34,images/coffee_mug.jpg
+0.48,coffee_mug,resnet50,images/coffee_mug.jpg
+0.71,coffee_mug,squeezenet1_0,images/coffee_mug.jpg
+0.68,coffee_mug,squeezenet1_1,images/coffee_mug.jpg
+0.54,coffee_mug,vgg16_bn,images/coffee_mug.jpg
+0.83,coffee_mug,vgg19_bn,images/coffee_mug.jpg
+1.00,kite,densenet201,images/kite.jpg
+1.00,kite,alexnet,images/kite.jpg
+0.98,kite,densenet121,images/kite.jpg
+0.99,kite,densenet161,images/kite.jpg
+0.99,kite,densenet169,images/kite.jpg
+1.00,kite,densenet201,images/kite.jpg
+0.99,kite,resnet101,images/kite.jpg
+0.88,kite,resnet152,images/kite.jpg
+0.91,kite,resnet18,images/kite.jpg
+0.98,kite,resnet34,images/kite.jpg
+1.00,kite,resnet50,images/kite.jpg
+0.75,kite,squeezenet1_0,images/kite.jpg
+0.95,kite,squeezenet1_1,images/kite.jpg
+1.00,kite,vgg16_bn,images/kite.jpg
+1.00,kite,vgg19_bn,images/kite.jpg
+```
+
+Otherwise individual models can be chosen with --model=densenet201,
+for example.
+
+```console
+$ ml classify cvbp --model=densenet201 images/*.jpg
+0.44,espresso,densenet201,images/coffee_mug.jpg
+1.00,kite,densenet201,images/kite.jpg
+0.66,balance_beam,densenet201,images/yogapose.jpg
 ```
 
 **detect**

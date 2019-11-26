@@ -226,7 +226,7 @@ bounding box for the objects found in the image, consisting of the
 left top and right bottom coordinates.
 
 ```console
-$ ml detect images/*.{jpg,png}
+$ ml detect cvbp images/*.{jpg,png}
 1.00,cup,61,59,273,244,images/coffee_mug.jpg
 1.00,bird,86,56,605,761,images/kite.jpg
 0.83,dog,28,100,200,186,images/image_04_bw.png

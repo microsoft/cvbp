@@ -36,7 +36,7 @@ from utils_cv.detection.model import DetectionLearner
 from utils_cv.detection.plot import plot_boxes, PlotSettings
 
 # ----------------------------------------------------------------------
-# Parse command line arguments: path --model= --webcam=
+# Parse command line arguments: path --model= # --webcam=
 # ----------------------------------------------------------------------
 
 options = argparse.ArgumentParser(
@@ -46,20 +46,20 @@ options = argparse.ArgumentParser(
 
 options.add_argument(
     'path',
-    nargs="*",
+    nargs="+",
     help='path or url to image')
 
-options.add_argument(
-    '-m', '--model',
-    help="model to use (default is resnet50)")
+# options.add_argument(
+#     '-m', '--model',
+#     help="model to use (default is resnet50)")
 
-options.add_argument(
-    '-w', '--webcam',
-    help="which webcam to use (default is 0)")
+# options.add_argument(
+#     '-w', '--webcam',
+#     help="which webcam to use (default is 0)")
 
 args = options.parse_args()
 
-webcam = 0 if args.webcam is None else args.webcam
+# webcam = 0 if args.webcam is None else args.webcam
 
 # ----------------------------------------------------------------------
 # Prepare processing function
@@ -105,34 +105,34 @@ if len(args.path):
                              f"{a.left},{a.top},{a.right},{a.bottom}," +
                              f"{path}\n")
 
-else:
+# else:
     
-    # ------------------------------------------------------------------------
-    # Webcam object detection
-    # ------------------------------------------------------------------------
+#     # ------------------------------------------------------------------------
+#     # Webcam object detection
+#     # ------------------------------------------------------------------------
 
-    def detect_frame(capture, model, label):
-        """Use the learner to detect objects.
-        """
-        _, frame = capture.read()  # Capture frame-by-frame
-        #        preds = model([utils.cv2torch(frame)])
-        #        anno_bboxes = _get_det_bboxes(preds, labels=label)
+#     def detect_frame(capture, model, label):
+#         """Use the learner to detect objects.
+#         """
+#         _, frame = capture.read()  # Capture frame-by-frame
+#         #        preds = model([utils.cv2torch(frame)])
+#         #        anno_bboxes = _get_det_bboxes(preds, labels=label)
 
-        detections = detector.predict(utils.cv2torch(frame))
-        im_pil = utils.cv2pil(frame)
-        plot_boxes(im_pil, detections['det_bboxes'],
-                   plot_settings=PlotSettings(rect_color=(0, 255, 0)))
-        return utils.pil2matplotlib(im_pil)
+#         detections = detector.predict(utils.cv2torch(frame))
+#         im_pil = utils.cv2pil(frame)
+#         plot_boxes(im_pil, detections['det_bboxes'],
+#                    plot_settings=PlotSettings(rect_color=(0, 255, 0)))
+#         return utils.pil2matplotlib(im_pil)
 
-    func = partial(detect_frame, model=model, label=coco_labels()[1:])
+#     func = partial(detect_frame, model=model, label=coco_labels()[1:])
 
-    # ----------------------------------------------------------------------
-    # Run webcam to show processed results.
-    # ----------------------------------------------------------------------
+#     # ----------------------------------------------------------------------
+#     # Run webcam to show processed results.
+#     # ----------------------------------------------------------------------
 
-    utils.process_webcam(func, webcam)
+#     utils.process_webcam(func, webcam)
 
-    sys.exit(0)
+#     sys.exit(0)
 
 
         

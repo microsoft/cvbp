@@ -27,14 +27,13 @@ from mlhub.pkg import is_url
 from mlhub.utils import get_cmd_cwd
 
 from functools import partial
+from PIL import Image
 
-from torchvision.models.detection import fasterrcnn_resnet50_fpn
+import torchvision
 
 from utils_cv.detection.data import coco_labels
-from utils_cv.detection.model import _get_det_bboxes
+from utils_cv.detection.model import DetectionLearner
 from utils_cv.detection.plot import plot_boxes, PlotSettings
-
-from fastai.vision import open_image
 
 # ----------------------------------------------------------------------
 # Parse command line arguments: path --model= --webcam=
@@ -66,22 +65,19 @@ webcam = 0 if args.webcam is None else args.webcam
 # Prepare processing function
 # ----------------------------------------------------------------------
 
-# Load model labels - length is 91 with a few N/A?
-
-labels = coco_labels()
-
 # Load ResNet model.
 
-model = fasterrcnn_resnet50_fpn(
+model = torchvision.models.detection.fasterrcnn_resnet50_fpn(
     pretrained=True,
-    rpn_pre_nms_top_n_test=5,
-    rpn_post_nms_top_n_test=5,
+    rpn_pre_nms_top_n_test = 5,
+    rpn_post_nms_top_n_test = 5,
     max_size=200,
 )
 
-# Set model to evaluation mode.
-  
-model.eval()
+detector = DetectionLearner(
+    model=model, 
+    labels=coco_labels()[1:],  #  First element is '__background__'
+)
 
 if len(args.path):
 
@@ -95,7 +91,7 @@ if len(args.path):
             imfile = os.path.join(get_cmd_cwd(), path)
     
         try:
-            im = open_image(imfile, convert_mode='RGB')
+            im = Image.open(imfile).convert('RGB')
         except:
             sys.stderr.write(f"'{imfile}' may not be an image file and " +
                              f"will be skipped.\n")
@@ -103,9 +99,8 @@ if len(args.path):
 
         # Output the objects identified.
 
-        preds = model([im.data])
-        anno_bboxes = _get_det_bboxes(preds, labels=labels)
-        for a in anno_bboxes:
+        detections = detector.predict(im)
+        for a in detections['det_bboxes']:
             sys.stdout.write(f"{a.score:.2f},{a.label_name}," +
                              f"{a.left},{a.top},{a.right},{a.bottom}," +
                              f"{path}\n")
@@ -120,14 +115,16 @@ else:
         """Use the learner to detect objects.
         """
         _, frame = capture.read()  # Capture frame-by-frame
-        preds = model([utils.cv2torch(frame)])
-        anno_bboxes = _get_det_bboxes(preds, labels=label)
+        #        preds = model([utils.cv2torch(frame)])
+        #        anno_bboxes = _get_det_bboxes(preds, labels=label)
+
+        detections = detector.predict(utils.cv2torch(frame))
         im_pil = utils.cv2pil(frame)
-        plot_boxes(im_pil, anno_bboxes,
+        plot_boxes(im_pil, detections['det_bboxes'],
                    plot_settings=PlotSettings(rect_color=(0, 255, 0)))
         return utils.pil2matplotlib(im_pil)
 
-    func = partial(detect_frame, model=model, label=labels)
+    func = partial(detect_frame, model=model, label=coco_labels()[1:])
 
     # ----------------------------------------------------------------------
     # Run webcam to show processed results.

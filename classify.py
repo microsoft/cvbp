@@ -35,6 +35,25 @@ from fastai.vision import models, open_image, Image
 from utils_cv.classification.data import imagenet_labels
 from utils_cv.classification.model import IMAGENET_IM_SIZE, model_to_learner
 
+all_models = [
+        "densenet201",
+        "alexnet",
+        "densenet121",
+        "densenet161",
+        "densenet169",
+        "densenet201",
+        "resnet101",
+        "resnet152",
+        "resnet18",
+        "resnet34",
+        "resnet50",
+        "squeezenet1_0",
+        "squeezenet1_1",
+        "vgg16_bn",
+        "vgg19_bn",
+    ]
+
+
 # ----------------------------------------------------------------------
 # Parse command line arguments: path --model= --webcam=
 # ----------------------------------------------------------------------
@@ -58,10 +77,20 @@ args = options.parse_args()
 
 webcam = 0 if args.webcam is None else args.webcam
 
-# ----------------------------------------------------------------------
-# Load the ImageNet model - 1000 labels for classification.
-# ----------------------------------------------------------------------
-
+if args.model == "list":
+    for m in all_models: print(m)
+    sys.exit(0)
+elif args.model == None:
+    modeln = ["resnet152"]
+elif args.model == "all":
+    modeln = all_models
+    if not len(args.path):
+        sys.stderr.write("Cannot utilise all models from the webcam. " +
+                         "Do not choose --model=all.\n")
+        sys.exit(1)
+else:
+    modeln = [args.model]
+    
 try:
     labels = imagenet_labels()   # The 1000 labels.
 except:
@@ -69,30 +98,88 @@ except:
                      "a network connection error.\n")
     sys.exit(1)
 
-# Potential values for the pre-built model: --model=
-#
-# models.BasicBlock 	models.Darknet 		models.DynamicUnet
-# models.ResLayer 	models.ResNet 		models.SqueezeNet
-# models.UnetBlock 	models.WideResNet 	models.XResNet
-# models.alexnet 	models.darknet 		models.densenet121
-# models.densenet161 	models.densenet169 	models.densenet201
-# models.resnet101 	models.resnet152 	models.resnet18
-# models.resnet34 	models.resnet50 	models.squeezenet1_0
-# models.squeezenet1_1 	models.unet 		models.vgg16_bn
-# models.vgg19_bn 	models.wrn 		models.wrn_22
-# models.xception 	models.xresnet 		models.xresnet101
-# models.xresnet152 	models.xresnet18 	models.xresnet34
-# models.xresnet50
+# ----------------------------------------------------------------------
+# Load the pre-built model
+# ----------------------------------------------------------------------
 
-if args.model == None:
-    model = model_to_learner(models.resnet18(pretrained=True), IMAGENET_IM_SIZE)
-elif args.model == "resnet152":
-    model = model_to_learner(models.resnet152(pretrained=True), IMAGENET_IM_SIZE)
-elif args.model == "xresnet152":
-    model = model_to_learner(models.xresnet152(pretrained=True), IMAGENET_IM_SIZE)
-else:
-    sys.stderr.write(f"Selected model '{args.model}' is not known.\n")
-    sys.exit(1)
+for path in args.path:
+
+    if is_url(path):
+        tempdir = tempfile.gettempdir()
+        imfile = os.path.join(tempdir, "temp.jpg")
+        urllib.request.urlretrieve(path, imfile)
+    else:
+        imfile = os.path.join(get_cmd_cwd(), path)
+    
+    try:
+        im = open_image(imfile, convert_mode='RGB')
+    except:
+        sys.stderr.write(f"'{imfile}' may not be an image file and will be skipped.\n")
+        continue
+
+    # Select the pre-built model.
+
+    for m in modeln: 
+        if m == "densenet201":
+            model = model_to_learner(models.densenet201(pretrained=True), IMAGENET_IM_SIZE)
+        elif m == "resnet152":
+            model = model_to_learner(models.resnet152(pretrained=True), IMAGENET_IM_SIZE)
+        elif m == "alexnet":
+            model = model_to_learner(models.alexnet(pretrained=True), IMAGENET_IM_SIZE)
+        elif m == "densenet121":
+            model = model_to_learner(models.densenet121(pretrained=True), IMAGENET_IM_SIZE)
+        elif m == "densenet161":
+            model = model_to_learner(models.densenet161(pretrained=True), IMAGENET_IM_SIZE)
+        elif m == "densenet169":
+            model = model_to_learner(models.densenet169(pretrained=True), IMAGENET_IM_SIZE)
+        elif m == "densenet201":
+            model = model_to_learner(models.densenet201(pretrained=True), IMAGENET_IM_SIZE)
+        elif m == "resnet101":
+            model = model_to_learner(models.resnet101(pretrained=True), IMAGENET_IM_SIZE)
+        elif m == "resnet152":
+            model = model_to_learner(models.resnet152(pretrained=True), IMAGENET_IM_SIZE)
+        elif m == "resnet18":
+            model = model_to_learner(models.resnet18(pretrained=True), IMAGENET_IM_SIZE)
+        elif m == "resnet34":
+            model = model_to_learner(models.resnet34(pretrained=True), IMAGENET_IM_SIZE)
+        elif m == "resnet50":
+            model = model_to_learner(models.resnet50(pretrained=True), IMAGENET_IM_SIZE)
+        elif m == "squeezenet1_0":
+            model = model_to_learner(models.squeezenet1_0(pretrained=True), IMAGENET_IM_SIZE)
+        elif m == "squeezenet1_1":
+            model = model_to_learner(models.squeezenet1_1(pretrained=True), IMAGENET_IM_SIZE)
+        elif m == "vgg16_bn":
+            model = model_to_learner(models.vgg16_bn(pretrained=True), IMAGENET_IM_SIZE)
+        elif m == "vgg19_bn":
+            model = model_to_learner(models.vgg19_bn(pretrained=True), IMAGENET_IM_SIZE)
+        else:
+            sys.stderr.write(f"Selected model '{m}' is not known.\n")
+            sys.exit(1)
+        # model = model_to_learner(models.BasicBlock(pretrained=True), IMAGENET_IM_SIZE) # unexpected keyword argument 'pretrained'
+        # model = model_to_learner(models.Darknet(pretrained=True), IMAGENET_IM_SIZE) # unexpected keyword argument 'pretrained'
+        # model = model_to_learner(models.DynamicUnet(pretrained=True), IMAGENET_IM_SIZE) # missing 2 required positional arguments: 'encoder' and 'n_classes'
+        # model = model_to_learner(models.ResLayer(pretrained=True), IMAGENET_IM_SIZE) # unexpected keyword argument 'pretrained'
+        # model = model_to_learner(models.ResNet(pretrained=True), IMAGENET_IM_SIZE) # unexpected keyword argument 'pretrained'
+        # model = model_to_learner(models.SqueezeNet(pretrained=True), IMAGENET_IM_SIZE) # unexpected keyword argument 'pretrained'
+        # model = model_to_learner(models.UnetBlock(pretrained=True), IMAGENET_IM_SIZE) # missing 3 required positional arguments: 'up_in_c', 'x_in_c', and 'hook'
+        # model = model_to_learner(models.WideResNet(pretrained=True), IMAGENET_IM_SIZE) # unexpected keyword argument 'pretrained'
+        # model = model_to_learner(models.XResNet(pretrained=True), IMAGENET_IM_SIZE) # unexpected keyword argument 'pretrained'
+        # model = model_to_learner(models.darknet(pretrained=True), IMAGENET_IM_SIZE) # 'module' object is not callable
+        # model = model_to_learner(models.unet(pretrained=True), IMAGENET_IM_SIZE) # 'module' object is not callable
+        # model = model_to_learner(models.wrn(pretrained=True), IMAGENET_IM_SIZE) # 'module' object is not callable
+        # model = model_to_learner(models.wrn_22(pretrained=True), IMAGENET_IM_SIZE) # got an unexpected keyword argument 'pretrained'
+        # model = model_to_learner(models.xception(pretrained=True), IMAGENET_IM_SIZE) # got an unexpected keyword argument 'pretrained'
+        # model = model_to_learner(models.xresnet(pretrained=True), IMAGENET_IM_SIZE) #  'module' object is not callable
+        # model = model_to_learner(models.xresnet101(pretrained=True), IMAGENET_IM_SIZE) # name 'model_urls' is not defined
+        # model = model_to_learner(models.xresnet152(pretrained=True), IMAGENET_IM_SIZE) # name 'model_urls' is not defined
+        # model = model_to_learner(models.xresnet18(pretrained=True), IMAGENET_IM_SIZE) # name 'model_urls' is not defined
+        # model = model_to_learner(models.xresnet34(pretrained=True), IMAGENET_IM_SIZE) # name 'model_urls' is not defined
+        # model = model_to_learner(models.xresnet50(pretrained=True), IMAGENET_IM_SIZE) # name 'model_urls' is not defined
+
+        # Predict the class label.
+
+        _, ind, prob = model.predict(im)
+        sys.stdout.write(f"{prob[ind]:.2f},{labels[ind]},{m},{path}\n")
 
 # TODO: Want to load from local copy rather than from ~/.torch which
 # means that for a new model the model first needs to be
@@ -121,6 +208,8 @@ if not len(args.path):
         utils.put_text(frame, f"{label[ind]} ({prob[ind]:.2f})")
         return utils.cv2matplotlib(frame)
 
+    # Can allow utilise one model for webcam.
+    
     func = partial(classify_frame, model=model, label=labels)
 
     # ----------------------------------------------------------------------
@@ -131,22 +220,3 @@ if not len(args.path):
 
     sys.exit(0)
     
-for path in args.path:
-
-    if is_url(path):
-        tempdir = tempfile.gettempdir()
-        imfile = os.path.join(tempdir, "temp.jpg")
-        urllib.request.urlretrieve(path, imfile)
-    else:
-        imfile = os.path.join(get_cmd_cwd(), path)
-    
-    try:
-        im = open_image(imfile, convert_mode='RGB')
-    except:
-        sys.stderr.write(f"'{imfile}' may not be an image file and will be skipped.\n")
-        continue
-
-    # Predict the class label.
-
-    _, ind, prob = model.predict(im)
-    sys.stdout.write(f"{prob[ind]:.2f},{labels[ind]},{path}\n")

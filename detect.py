@@ -97,7 +97,7 @@ if len(args.path):
         try:
             im = open_image(imfile, convert_mode='RGB')
         except:
-            sys.stderr.write(f"'{imfile}' may not be an image file and" +
+            sys.stderr.write(f"'{imfile}' may not be an image file and " +
                              f"will be skipped.\n")
             continue
 

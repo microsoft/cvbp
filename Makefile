@@ -34,3 +34,10 @@ clean::
 
 realclean:: clean
 	rm -f $(MODEL)_*.mlm thumbnail.jpg
+
+ID=e5d1080
+utils:
+	wget https://api.github.com/repos/microsoft/computervision/zipball/$(ID) -O $(ID).zip
+	unzip $(ID).zip 'microsoft-ComputerVision-$(ID)/utils_cv/*' -d $(ID)
+	mv $(ID)/microsoft-ComputerVision-$(ID)/utils_cv .
+	rm -rf $(ID)

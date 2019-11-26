@@ -27,6 +27,8 @@ dependencies:
     - utils.py
     - demo.py
     - classify.py
+    - detect.py
 commands:
   demo     : Use pre-built open source models for computer vision.
   classify : Classify images.
+  detect   : Detect objects and bounding boxes.

@@ -21,7 +21,7 @@ def get_camera(num=0):
     """
     capture = cv.VideoCapture(int(num))
     if not capture.isOpened():
-        print('Unable to load camera!')
+        print("Unable to load camera!")
         sys.exit(1)
 
     return capture
@@ -70,25 +70,32 @@ def put_text(im_cv, text):
     """Put text on the top-middle of a OpenCV image.
     """
 
-    (text_width, text_height), _ = cv.getTextSize(text, TEXT_FONT, TEXT_SIZE, LINE_WIDTH)
+    (text_width, text_height), _ = cv.getTextSize(
+        text, TEXT_FONT, TEXT_SIZE, LINE_WIDTH
+    )
     _, img_width, _ = im_cv.shape
 
     x = int((img_width - text_width) / 2)
     y = text_height + 5
-    cv.putText(im_cv, text, (x, y), TEXT_FONT, TEXT_SIZE, TEXT_COLOR, LINE_WIDTH)
+    cv.putText(
+        im_cv, text, (x, y), TEXT_FONT, TEXT_SIZE, TEXT_COLOR, LINE_WIDTH
+    )
 
 
 def process_webcam(func, num):
     camera = get_camera(num)  # Open webcam
-    plt.axis('off')  # Turn off axis in plot window
+    plt.axis("off")  # Turn off axis in plot window
 
-#    print("\nPlease close the window (Ctrl-w) to quit.")
+    #    print("\nPlease close the window (Ctrl-w) to quit.")
 
     im = plt.gca().imshow(func(camera))
     video = FuncAnimation(
         plt.gcf(),
-        lambda i: im.set_data(func(camera)),  # Update plot window with new camera frame
-        interval=100)
+        lambda i: im.set_data(
+            func(camera)
+        ),  # Update plot window with new camera frame
+        interval=100,
+    )
 
     plt.show()
     camera.release()  # When everything is done, release the capture

@@ -13,7 +13,9 @@
 
 from mlhub.pkg import mlask, mlcat
 
-mlcat("Microsoft Computer Vision Best Practice", """\
+mlcat(
+    "Microsoft Computer Vision Best Practice",
+    """\
 Welcome to a demo of the Microsoft open source Computer Vision toolkit.
 This is a Microsoft open source project and is not a supported product.
 Pull requests are most welcome at https://github.com/microsoft/cvbp.
@@ -21,7 +23,8 @@ Pull requests are most welcome at https://github.com/microsoft/cvbp.
 This demo runs several examples of computer vision tasks. All of the
 functionality is also available as command line tools as part of this
 MLHub package.
-""")
+""",
+)
 
 # ----------------------------------------------------------------------
 # Setup
@@ -46,13 +49,12 @@ import utils
 # ----------------------------------------------------------------------
 
 parser = argparse.ArgumentParser(
-    prog='demo',
-    description='Classify or Detect objects from camera.'
+    prog="demo", description="Classify or Detect objects from camera."
 )
 
 parser.add_argument(
-    '-w', '--webcam',
-    help="which webcam to use (default is 0)")
+    "-w", "--webcam", help="which webcam to use (default is 0)"
+)
 
 args = parser.parse_args()
 
@@ -60,20 +62,25 @@ webcam = 0 if args.webcam is None else args.webcam
 
 mlask(end="\n")
 
-mlcat("Webcam Classification","""\
+mlcat(
+    "Webcam Classification",
+    """\
 This demonstration will turn on your webcam (if it is accessible) and
-begin classifying the primary object within the fram of the webcam. If 
+begin classifying the primary object within the frame of the webcam. If 
 you have multiple webcams and the wrong one is selected, try selecting
 others with --webcam=1, for example.
 
 To continue close the webcam window with Ctrl-W.
-""")
+""",
+)
+
 
 # ----------------------------------------------------------------------
 # Prepare processing function
 # ----------------------------------------------------------------------
 
 # Webcam classification
+
 
 def classify_frame(capture, learner, label):
     """Use the learner to predict the class label.
@@ -102,12 +109,16 @@ utils.process_webcam(func, webcam)
 
 mlask(end="\n")
 
-mlcat("Webcam Object Detection","""\
+mlcat(
+    "Webcam Object Detection",
+    """\
 This demonstration will turn on your webcam (if it is accessible) and
-begin identifying objects within the fram of the webcam.
+begin identifying objects within the frame of the webcam.
 
 To continue close the webcam window with Ctrl-W.
-""")
+""",
+)
+
 
 def detect_frame(capture, model, label):
     """Use the learner to detect objects.
@@ -116,7 +127,9 @@ def detect_frame(capture, model, label):
     preds = model([utils.cv2torch(frame)])
     anno_bboxes = _get_det_bboxes(preds, labels=label)
     im_pil = utils.cv2pil(frame)
-    plot_boxes(im_pil, anno_bboxes, plot_settings=PlotSettings(rect_color=(0, 255, 0)))
+    plot_boxes(
+        im_pil, anno_bboxes, plot_settings=PlotSettings(rect_color=(0, 255, 0))
+    )
     return utils.pil2matplotlib(im_pil)
 
 

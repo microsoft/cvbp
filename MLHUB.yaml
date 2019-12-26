@@ -20,7 +20,7 @@ dependencies:
     - numpy
   files:
     # TODO download: "https://download.pytorch.org/models/resnet18-5c106cde.pth" to /home/gjw/.torch/models/resnet18-5c106cde.pth
-    # `00538529a` is currently the latest commmit on branch `stagingOD`
+    # `00538529a` is currently the latest commit on branch `stagingOD`
     # - 'Microsoft/ComputerVision@00538529a:utils_cv'
     - 'Microsoft/ComputerVision@e5d1080:utils_cv'
     - docs/README.md

@@ -21,6 +21,7 @@ import utils
 
 import os
 import sys
+import tempfile
 import argparse
 
 from mlhub.pkg import is_url

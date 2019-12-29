@@ -4,7 +4,9 @@ import numpy as np
 import PIL
 import sys
 
+from itertools import groupby
 from matplotlib.animation import FuncAnimation
+from pycocotools import mask as coco_mask
 from torchvision import transforms as T
 
 TEXT_COLOR = (0, 255, 0)  # Green
@@ -99,3 +101,33 @@ def process_webcam(func, num):
 
     plt.show()
     camera.release()  # When everything is done, release the capture
+
+
+def binary_mask_to_uncompressed_rle(binary_mask):
+    """Convert binary mask to *uncompressed* run-length encoding (RLE).
+
+    Return a dict containing the uncompressed RLE counts of the mask as well
+    as its size (height, width).
+
+    See https://stackoverflow.com/a/49547872
+    """
+    rle = {"size": list(binary_mask.shape)}
+
+    data = binary_mask.ravel("F")
+    counts = [len(list(g)) for k, g in groupby(data)]
+    if data[0] == 1:
+        counts = [0] + counts
+
+    rle["counts"] = counts
+    return rle
+
+
+def binary_mask_to_compressed_rle(binary_mask):
+    """Convert binary mask to *compressed* run-length encoding (RLE).
+
+    Return a dict containing the LEB128-compressed RLE counts of the mask as
+    well as its size (height, width).
+
+    See https://github.com/cocodataset/cocoapi/blob/master/PythonAPI/pycocotools/mask.py
+    """
+    return coco_mask.encode(binary_mask.astype(np.uint8))

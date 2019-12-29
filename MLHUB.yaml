@@ -10,25 +10,23 @@ meta:
   url          : https://github.com/microsoft/cvbp
 dependencies:
   pip3:
-    - torchvision
-    - torch
-    - fastai
-    - Cython
+    - fastai==1.0.57  # depends on scipy, torchvision, torch>=1.0.0, matplotlib, pillow, numpy>=1.15
+    - torchvision==0.4.0  # depends on torch==1.2.0, pillow>=4.1.1, numpy, six
+    - Cython>=0.29.1
     - pycocotools
     - IPython
-    - opencv-contrib-python
-    - numpy
+    - opencv-contrib-python  # depends on numpy
   files:
     # TODO download: "https://download.pytorch.org/models/resnet18-5c106cde.pth" to /home/gjw/.torch/models/resnet18-5c106cde.pth
-    # `00538529a` is currently the latest commit on branch `stagingOD`
-    # - 'Microsoft/ComputerVision@00538529a:utils_cv'
-    - 'Microsoft/ComputerVision@e5d1080:utils_cv'
+    - 'microsoft/computervision-recipes@c3abf16:utils_cv'
     - docs/README.md
     - utils.py
     - demo.py
     - classify.py
     - detect.py
+    - mask.py
 commands:
   demo     : Use pre-built open source models for computer vision.
   classify : Classify images.
   detect   : Detect objects and bounding boxes.
+  mask     : Detect objects and masks.

@@ -38,7 +38,7 @@ from torchvision.models.detection import fasterrcnn_resnet50_fpn
 from utils_cv.classification.data import imagenet_labels
 from utils_cv.classification.model import IMAGENET_IM_SIZE, model_to_learner
 from utils_cv.detection.data import coco_labels
-from utils_cv.detection.model import _get_det_bboxes
+from utils_cv.detection.model import _extract_od_results
 from utils_cv.detection.plot import PlotSettings, plot_boxes
 
 import argparse
@@ -124,8 +124,9 @@ def detect_frame(capture, model, label):
     """Use the learner to detect objects.
             """
     _, frame = capture.read()  # Capture frame-by-frame
-    preds = model([utils.cv2torch(frame)])
-    anno_bboxes = _get_det_bboxes(preds, labels=label)
+    pred = model([utils.cv2torch(frame)])[0]
+    pred = {k: v.detach().cpu().numpy() for k, v in pred.items()}
+    anno_bboxes = _extract_od_results(pred, labels=label)["det_bboxes"]
     im_pil = utils.cv2pil(frame)
     plot_boxes(
         im_pil, anno_bboxes, plot_settings=PlotSettings(rect_color=(0, 255, 0))
